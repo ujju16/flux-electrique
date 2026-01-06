@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
+/* Flux Electrique - Dark Theme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Couleurs principales */
+  --flux-primary: #00e5ff; /* Cyan électrique */
+  --flux-secondary: #00c853; /* Vert Matrix/Circuit */
+  --flux-bg-deep: #0d1117; /* Noir profond */
+  --flux-bg-card: #161b22; /* Gris foncé pour cartes */
+  --flux-text: #e6edf3; /* Blanc cassé */
+
+  /* Compatibilité */
+  --background: var(--flux-bg-deep);
+  --foreground: var(--flux-text);
 }
 
 @theme inline {
+  /* Couleurs personnalisées Flux Electrique */
+  --color-flux-primary: var(--flux-primary);
+  --color-flux-secondary: var(--flux-secondary);
+  --color-flux-bg-deep: var(--flux-bg-deep);
+  --color-flux-bg-card: var(--flux-bg-card);
+  --color-flux-text: var(--flux-text);
+
+  /* Standard colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Typography */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-orbitron);
+  --font-mono: var(--font-fira-code);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--flux-bg-deep);
+  color: var(--flux-text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

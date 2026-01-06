@@ -1,14 +1,17 @@
 # Copilot Instructions for flux-electrique
 
 ## Project Overview
-Next.js 16 application using the App Router with React 19, TypeScript, and Tailwind CSS v4. Uses **Biome** for linting/formatting instead of ESLint/Prettier.
+"Flux Electrique" - Professional website showcasing dual expertise in **electronics repair** (Hardware) and **software development** (DevSecOps, IoT, embedded systems). Built with Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, and PostgreSQL via Prisma. Uses **Biome** for linting/formatting instead of ESLint/Prettier.
 
 ## Technology Stack
 - **Framework**: Next.js 16.1 with App Router (`src/app/` directory structure)
 - **React**: Version 19.2 with React Compiler enabled (`reactCompiler: true` in [next.config.ts](../next.config.ts))
 - **Styling**: Tailwind CSS v4 with PostCSS plugin (`@tailwindcss/postcss`)
+- **Database**: PostgreSQL with Prisma ORM v6 (see [prisma/schema.prisma](../prisma/schema.prisma))
 - **Type System**: TypeScript 5 with strict mode enabled
+- **Validation**: Zod for form validation and environment variables
 - **Code Quality**: Biome 2.2 (NOT ESLint/Prettier)
+- **Deployment Target**: Google Cloud (GKE + Cloud SQL) with Docker containers
 
 ## Key Conventions
 
@@ -28,23 +31,49 @@ Next.js 16 application using the App Router with React 19, TypeScript, and Tailw
 - Strict mode enabled with `noEmit` (Next.js handles compilation)
 
 ### Styling Patterns
+- **Brand Identity**: Dark theme with electric/tech aesthetic
+  - Primary: `#00E5FF` (cyan électrique) - for CTAs and links
+  - Secondary: `#00C853` (green Matrix/circuit) - for success states
+  - Background Deep: `#0D1117` (GitHub Dark style)
+  - Background Card: `#161B22` (for cards/sections)
+  - Text: `#E6EDF3` (off-white for readability)
 - Uses Tailwind v4 inline theme syntax in [globals.css](../src/app/globals.css):
   ```css
   @theme inline {
-    --color-background: var(--background);
+    --color-flux-primary: var(--flux-primary);
   }
   ```
-- CSS variables for theming: `--background`, `--foreground`, custom font variables
-- Dark mode via `prefers-color-scheme` media query
-- Geist font family loaded from `next/font/google` in [layout.tsx](../src/app/layout.tsx)
+- CSS variables for theming: Access via `--flux-primary`, `--flux-secondary`, etc.
+- Dark mode by default (no light mode toggle currently)
+- Typography fonts loaded in [layout.tsx](../src/app/layout.tsx):
+  - **Inter** (body text) - `--font-inter`
+  - **Orbitron** (headings/display) - `--font-orbitron`
+  - **Fira Code** (code blocks in blog) - `--font-fira-code`
 
 ### Component Structure
 - **Server Components by default** (React 19 + Next.js App Router)
-- Use `"use client"` directive only when needed (not present in current codebase)
-- Layout pattern: Root layout in [src/app/layout.tsx](../src/app/layout.tsx) defines metadata and font loading
-- Example styling pattern from [page.tsx](../src/app/page.tsx):
-  - Utility-first with dark mode variants: `dark:bg-black`, `dark:text-zinc-50`
-  - Responsive prefixes: `sm:items-start`, `md:w-[158px]`
+- Use `"use client"` directive only when needed (forms, interactive elements)
+- **Route Groups**: Main site in `src/app/(site)/` for shared layout
+- Folder organization:
+  ```
+  src/
+  ├── app/(site)/          # Public-facing pages with shared layout
+  │   ├── page.tsx         # Homepage
+  │   ├── about/
+  │   ├── services/
+  │   ├── contact/
+  │   └── blog/
+  │       └── [slug]/      # Dynamic blog post pages
+  ├── components/
+  │   ├── ui/              # Atomic components (shadcn/ui style)
+  │   ├── business/        # Domain-specific (ServiceCard, TechStackList)
+  │   └── layout/          # Header, Footer
+  ├── lib/
+  │   ├── prisma.ts        # Singleton Prisma client
+  │   └── utils.ts         # Helpers (cn() for class merging)
+  └── server/
+      └── actions.ts       # Server Actions (contact form, etc.)
+  ```
 
 ## Development Workflow
 
@@ -55,16 +84,34 @@ Next.js 16 application using the App Router with React 19, TypeScript, and Tailw
 - `npm run lint` - Run Biome checks
 - `npm run format` - Auto-format with Biome
 
+### Database (Prisma)
+- Prisma schema in [prisma/schema.prisma](../prisma/schema.prisma)
+- Models: `Post` (blog), `ContactSubmission` (contact tracking)
+- Categories: `ELECTRONIC`, `SOFTWARE`, `DEVSECOPS`
+- Generate client: `npx prisma generate`
+- Run migrations: `npx prisma migrate dev`
+- Access via singleton in [lib/prisma.ts](../src/lib/prisma.ts)
+
 ### React Compiler
 - Enabled in [next.config.ts](../next.config.ts) - automatically optimizes components
 - No manual memoization (`useMemo`, `useCallback`) needed in most cases
 
+### DevSecOps & Deployment
+- **Target**: Google Cloud (GKE Autopilot + Cloud SQL PostgreSQL)
+- **Container**: Docker multi-stage build (standalone output mode enabled)
+- **CI/CD**: Cloud Build or GitHub Actions
+  - Pipeline: Lint → Build → Scan (Trivy) → Push → Deploy
+- **Security**: Non-root container user, CSP headers in next.config.ts
+
 ## Important Files
-- [next.config.ts](../next.config.ts) - Next.js configuration (React Compiler enabled)
+- [next.config.ts](../next.config.ts) - Next.js configuration (React Compiler enabled, standalone output)
 - [biome.json](../biome.json) - Code quality rules and formatting config
 - [tsconfig.json](../tsconfig.json) - TypeScript settings and path aliases
 - [src/app/layout.tsx](../src/app/layout.tsx) - Root layout with font loading and metadata
 - [src/app/globals.css](../src/app/globals.css) - Global styles with Tailwind v4 theme
+- [prisma/schema.prisma](../prisma/schema.prisma) - Database schema definition
+- [src/lib/prisma.ts](../src/lib/prisma.ts) - Prisma client singleton
+- [src/server/actions.ts](../src/server/actions.ts) - Server Actions with Zod validation
 
 ## Code Generation Preferences
 - Use TypeScript for all new files
@@ -73,3 +120,6 @@ Next.js 16 application using the App Router with React 19, TypeScript, and Tailw
 - Include dark mode variants for all color-based utilities
 - Use semantic HTML with proper accessibility attributes
 - Import `Image` from `next/image` for images, never `<img>` tags
+- Validate forms with Zod schemas before processing
+- Use Server Actions for mutations (forms, data updates)
+- Blog posts: Use `generateStaticParams` for SSG with dynamic routes
