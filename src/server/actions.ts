@@ -31,7 +31,10 @@ export async function submitContactForm(data: ContactFormData) {
     return { success: true };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return { success: false, errors: error.errors };
+      return {
+        success: false,
+        errors: error.issues.map((issue) => issue.message),
+      };
     }
     return { success: false, error: "Une erreur est survenue" };
   }
