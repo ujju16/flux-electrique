@@ -19,7 +19,7 @@
   --foreground: var(--flux-text);
 }
 
-@theme inline {
+:root {
   /* Couleurs personnalisées Flux Electrique */
   --color-flux-dark: var(--flux-dark);
   --color-flux-panel: var(--flux-panel);
