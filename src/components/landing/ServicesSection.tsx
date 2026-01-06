@@ -39,11 +39,17 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section className="py-24 bg-flux-dark relative">
+    <section
+      aria-labelledby="services-heading"
+      className="py-24 bg-flux-dark relative"
+    >
       <div className="container mx-auto px-4 max-w-7xl">
         {/* En-tête de section */}
         <div className="mb-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-tech font-bold mb-4">
+          <h2
+            id="services-heading"
+            className="text-3xl md:text-4xl font-tech font-bold mb-4"
+          >
             <span className="text-white">Nos Domaines d'</span>
             <span className="text-flux-cyan border-b-2 border-flux-cyan pb-1">
               Intervention
@@ -61,6 +67,7 @@ export default function ServicesSection() {
               key={service.id}
               href={service.href}
               className={`group relative bg-flux-panel border border-flux-border rounded-xl p-8 transition-all duration-300 ${service.color} ${service.glow} hover:-translate-y-1 block`}
+              aria-label={`${service.title} - ${service.description}`}
             >
               {/* Icône flottante avec background */}
               <div className="mb-6 inline-block p-4 rounded-lg bg-flux-dark border border-flux-border shadow-inner group-hover:scale-110 transition-transform duration-300">
