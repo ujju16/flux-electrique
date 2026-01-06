@@ -8,13 +8,13 @@
   --color-flux-green: #00c853;
   --color-flux-text: #e6edf3;
   --color-flux-border: #30363d;
-  
+
   /* Legacy compatibility */
   --color-flux-primary: #00e5ff;
   --color-flux-secondary: #00c853;
   --color-flux-bg-deep: #0d1117;
   --color-flux-bg-card: #161b22;
-  
+
   /* Typography */
   --font-sans: var(--font-inter);
   --font-display: var(--font-orbitron);

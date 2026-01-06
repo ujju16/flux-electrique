@@ -86,16 +86,16 @@ export default function ContactPage() {
                         name="type"
                         className="w-full bg-flux-dark border border-flux-border rounded-lg px-4 py-3 text-white focus:border-flux-cyan focus:ring-1 focus:ring-flux-cyan outline-none transition-all appearance-none mt-2"
                       >
-                      <option value="HARDWARE_REPAIR">
-                        🛠️ Réparation Électronique
-                      </option>
-                      <option value="SOFTWARE_DEV">
-                        💻 Développement Logiciel
-                      </option>
-                      <option value="DEVSECOPS_CONSULTING">
-                        🛡️ Audit & DevOps
-                      </option>
-                      <option value="OTHER">Autre demande</option>
+                        <option value="HARDWARE_REPAIR">
+                          🛠️ Réparation Électronique
+                        </option>
+                        <option value="SOFTWARE_DEV">
+                          💻 Développement Logiciel
+                        </option>
+                        <option value="DEVSECOPS_CONSULTING">
+                          🛡️ Audit & DevOps
+                        </option>
+                        <option value="OTHER">Autre demande</option>
                       </select>
                     </label>
                   </div>
@@ -179,13 +179,17 @@ export default function ContactPage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-300">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-slate-300"
+                    >
                       Email pro
                     </label>
                     <input
                       required
-                      name="email"
                       type="email"
+                      id="email"
+                      name="email"
                       className="w-full bg-flux-dark border border-flux-border rounded-lg px-4 py-3 text-white focus:border-flux-cyan focus:ring-1 focus:ring-flux-cyan outline-none transition-all placeholder:text-slate-600"
                       placeholder="john@company.com"
                     />

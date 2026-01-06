@@ -1,15 +1,14 @@
 import {
   ArrowRight,
   CheckCircle2,
-  Code2,
   Cpu,
   Laptop,
   Server,
   Smartphone,
   Zap,
 } from "lucide-react";
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Services - Flux Electrique",
@@ -161,9 +160,9 @@ export default function ServicesPage() {
                     Stack Technique_
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {service.tools.map((tool, i) => (
+                    {service.tools.map((tool) => (
                       <span
-                        key={i}
+                        key={tool}
                         className="text-xs font-mono px-3 py-1.5 rounded bg-flux-dark border border-flux-border text-flux-text"
                       >
                         {tool}
@@ -181,8 +180,8 @@ export default function ServicesPage() {
                     Points Forts
                   </h3>
                   <ul className="space-y-4">
-                    {service.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
+                    {service.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3">
                         <Zap className="w-4 h-4 text-flux-cyan mt-1 flex-shrink-0" />
                         <span className="text-slate-300 text-sm leading-relaxed">
                           {feature}

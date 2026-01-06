@@ -1,5 +1,5 @@
+import { ArrowRight, Code2, Cpu } from "lucide-react";
 import Link from "next/link";
-import { ArrowRight, Cpu, Code2 } from "lucide-react";
 
 export default function Hero() {
   return (
