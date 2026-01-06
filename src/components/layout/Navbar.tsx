@@ -10,6 +10,7 @@ const navLinks = [
   { name: "Services", href: "/services" },
   { name: "Blog", href: "/blog" },
   { name: "À Propos", href: "/about" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -56,6 +57,7 @@ export default function Navbar() {
             className="md:hidden text-flux-text hover:text-white p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             type="button"
+            aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
             {isMobileMenuOpen ? (
               <X className="h-6 w-6" />
