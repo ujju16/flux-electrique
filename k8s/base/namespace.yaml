@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-app
+  labels:
+    app.kubernetes.io/name: flux-electrique
+    app.kubernetes.io/part-of: flux-electrique-platform

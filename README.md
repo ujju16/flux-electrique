@@ -120,6 +120,87 @@ npx prisma db push         # Sync sans migration
 - Headers CSP dans `next.config.ts`
 - Standalone output mode activé
 
+## 🧪 CI/CD & DevSecOps (Multi-Stage Pipeline)
+
+### Environment Strategy
+
+- **Development** (`develop` branch) → GKE dev cluster (1 replica, continuous deployment)
+- **Staging** (`staging` branch) → GKE staging cluster (2 replicas, UAT/QA testing)
+- **Production** (`main` branch) → GKE prod cluster (3 replicas, zero-downtime rolling updates)
+
+### Pipeline Automation
+
+- **Cloud Build** pilote la chaîne complète via trois configurations :
+  - [`cloudbuild.dev.yaml`](cloudbuild.dev.yaml) - Développement continu
+  - [`cloudbuild.staging.yaml`](cloudbuild.staging.yaml) - Validation pré-production
+  - [`cloudbuild.yaml`](cloudbuild.yaml) - Déploiement production
+  
+- **Étapes par environnement** : Lint (Biome) → Build (Next.js) → Scan (Trivy CRITICAL/HIGH) → Push (Artifact Registry) → Deploy (GKE via Kustomize overlays)
+
+- **Sécurité pipeline** :
+  - `requestedVerifyOption: VERIFIED` (provenance attestation)
+  - Scan Trivy en mode bloquant (zero tolerance for HIGH/CRITICAL in staging/prod)
+  - Service account à privilèges minimaux (Artifact Registry Writer + GKE Developer)
+  - Aucun secret dans Git (Google Secret Manager + Kubernetes secrets)
+
+### Kustomize Overlays (Environment-Specific Configs)
+
+```
+k8s/
+├── base/                  # Manifestes communs (deployment, service, namespace)
+└── overlays/
+    ├── dev/               # 1 replica, 100m CPU, 128Mi RAM
+    ├── staging/           # 2 replicas, 200m CPU, 192Mi RAM
+    └── production/        # 3 replicas, 250m CPU, 256Mi RAM, maxUnavailable=0
+```
+
+Chaque overlay applique des patches JSON pour les ressources, replicas et labels d'environnement.
+
+## 🏃 Agile & Scrum Workflow
+
+### Branching Strategy (Git Flow)
+
+- **`main`** → Production (merges from `staging` only, 2 approvals required)
+- **`staging`** → Pre-production UAT (merges from `develop` after sprint review)
+- **`develop`** → Integration branch (feature branches merge here)
+- **`feature/FLX-XX-desc`** → Feature branches (auto-delete after merge)
+- **`hotfix/FLX-XX-desc`** → Emergency production fixes (branch from `main`)
+
+See [doc/branching_strategy.md](doc/branching_strategy.md) for detailed workflow and examples.
+
+### Sprint Cadence (2 semaines)
+
+| Jour | Cérémonie | Durée | Action Technique |
+|------|-----------|-------|------------------|
+| Lundi | Sprint Planning | 2h | Estimer les stories (Planning Poker) |
+| Lundi-Jeudi | Daily Standup | 15min | Sync équipe (bloqueurs, progrès) |
+| Vendredi | Sprint Review | 1h | Démo PO → Merge `develop` → `staging` |
+| Vendredi | Retrospective | 1h | Amélioration continue |
+| Mercredi | Backlog Refinement | 1h | Préparer prochain sprint |
+| **Mercredi Release** | Production Deploy | - | Merge `staging` → `main` (après UAT) |
+
+### Definition of Done (DoD)
+
+- [ ] Code merged to `develop` via approved PR
+- [ ] Biome lint + Next.js build passes
+- [ ] Trivy scan: 0 HIGH/CRITICAL vulnerabilities
+- [ ] Deployed to dev environment and smoke-tested
+- [ ] Documentation updated (if public API changed)
+- [ ] PO accepts story in Sprint Review
+
+See [doc/agile_workflow.md](doc/agile_workflow.md) for story estimation, metrics, and ceremony templates.
+
+## 📚 Documentation Complète
+
+- **[doc/agile_workflow.md](doc/agile_workflow.md)** - Scrum ceremonies, story estimation, metrics
+- **[doc/branching_strategy.md](doc/branching_strategy.md)** - Git Flow, branch naming, merge workflows
+- **[doc/branch_protection.md](doc/branch_protection.md)** - GitHub protection rules, Cloud Build triggers
+- **[doc/ci_cd_pipeline.md](doc/ci_cd_pipeline.md)** - Pipeline stages, security hardening
+- **[doc/deployment.md](doc/deployment.md)** - Multi-environment GKE setup, `scripts/cicd.py` usage
+- **[doc/security.md](doc/security.md)** - Security checklist, secret management, compliance
+
+
+
 ## 📋 Exigences Non-Fonctionnelles
 
 - **PERF-01**: Core Web Vitals (LCP < 2.5s sur mobile)
