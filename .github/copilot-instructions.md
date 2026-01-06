@@ -123,3 +123,75 @@
 - Validate forms with Zod schemas before processing
 - Use Server Actions for mutations (forms, data updates)
 - Blog posts: Use `generateStaticParams` for SSG with dynamic routes
+
+## Accessibility Guidelines (ARIA)
+Follow W3C ARIA Authoring Practices Guide (APG) for all interactive components:
+
+### Navigation & Landmarks
+- **Navigation**: Add `aria-label="Navigation principale"` to `<nav>` elements
+- **Main Content**: Use `aria-labelledby` to reference page heading ID
+- **Sections**: Use `aria-labelledby` for section headings or descriptive `aria-label`
+
+### Interactive Elements
+- **Buttons**: 
+  - Toggle buttons: Use `aria-expanded="true|false"` for disclosure widgets
+  - Mobile menu: Add `aria-controls="menu-id"` to reference controlled element
+  - Icon-only buttons: Always include descriptive `aria-label`
+- **Links**: Add `aria-label` for context when link text alone is unclear
+- **Forms**:
+  - Group related fields with `<fieldset>` and `<legend>`
+  - Use `aria-invalid="true"` on fields with validation errors
+  - Use `aria-describedby="error-id"` to associate error messages
+  - Required fields: Use HTML5 `required` attribute
+
+### Dynamic Content
+- **Status Messages**: Use `role="status"` with `aria-live="polite"` for non-critical updates
+- **Alerts**: Use `role="alert"` or `aria-live="assertive"` for critical messages
+- **Loading States**: Add `aria-label="Loading..."` to spinner elements
+- **Menu States**: Use `aria-hidden="true"` on collapsed/hidden elements
+
+### Examples from Project
+```tsx
+// Navigation (Navbar.tsx)
+<nav aria-label="Navigation principale">
+  <button 
+    aria-expanded={isOpen}
+    aria-controls="mobile-menu"
+    aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+  />
+  <div id="mobile-menu" aria-hidden={!isOpen}>
+</nav>
+
+// Page Structure (page.tsx)
+<main aria-labelledby="page-heading">
+  <h1 id="page-heading">Title</h1>
+</main>
+
+// Sections (Hero.tsx, ServicesSection.tsx)
+<section aria-label="Introduction Flux Electrique">
+<section aria-labelledby="services-heading">
+  <h2 id="services-heading">Services</h2>
+</section>
+
+// Forms (contact/page.tsx)
+<form>
+  <fieldset>
+    <legend>Informations de contact</legend>
+    <input 
+      aria-invalid={!!errors.email}
+      aria-describedby={errors.email ? "email-error" : undefined}
+    />
+    {errors.email && <span id="email-error">{errors.email}</span>}
+  </fieldset>
+</form>
+
+// Status Messages
+<div role="status" aria-live="polite">
+  Formulaire envoyé avec succès
+</div>
+```
+
+### Resources
+- W3C ARIA APG: https://www.w3.org/WAI/ARIA/apg/
+- MDN Accessibility: https://developer.mozilla.org/en-US/docs/Web/Accessibility
+- WebAIM: https://webaim.org/

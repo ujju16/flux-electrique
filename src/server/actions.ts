@@ -33,7 +33,11 @@ export async function submitContactForm(data: ContactFormData) {
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        errors: error.issues.map((issue) => issue.message),
+        errors: error.issues.map((issue) => ({
+          path: issue.path,
+          message: issue.message,
+          code: issue.code,
+        })),
       };
     }
     return { success: false, error: "Une erreur est survenue" };
