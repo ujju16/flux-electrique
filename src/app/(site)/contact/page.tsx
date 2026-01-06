@@ -240,6 +240,16 @@ export default function ContactPage() {
                 )}
               </div>
 
+              {/* Honeypot Field - Hidden from users, visible to bots */}
+              <input
+                type="text"
+                name="_honey"
+                tabIndex={-1}
+                autoComplete="off"
+                className="absolute opacity-0 pointer-events-none"
+                aria-hidden="true"
+              />
+
               {/* Error Global */}
               {!state.success && state.message && (
                 <div className="p-3 bg-red-500/10 border border-red-500/50 rounded text-red-200 text-sm text-center">
