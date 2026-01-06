@@ -94,9 +94,15 @@ const serviceDetails = [
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-flux-dark text-white pt-16">
+    <main
+      className="min-h-screen bg-flux-dark text-white pt-16"
+      aria-labelledby="services-page-heading"
+    >
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-flux-panel to-flux-dark border-b border-flux-border">
+      <section
+        className="py-20 bg-gradient-to-b from-flux-panel to-flux-dark border-b border-flux-border"
+        aria-label="En-tête des services professionnels"
+      >
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-flux-dark border border-flux-border mb-6">
             <Zap className="w-4 h-4 text-flux-cyan" />
@@ -104,7 +110,10 @@ export default function ServicesPage() {
               EXPERTISE COMPLÈTE
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-tech font-bold mb-6">
+          <h1
+            id="services-page-heading"
+            className="text-4xl md:text-5xl font-tech font-bold mb-6"
+          >
             <span className="text-white">Services </span>
             <span className="text-flux-cyan">Professionnels</span>
           </h1>
@@ -116,13 +125,14 @@ export default function ServicesPage() {
       </section>
 
       {/* Services détaillés */}
-      <section className="py-20">
+      <section className="py-20" aria-label="Détails des services">
         <div className="container mx-auto px-4 max-w-7xl space-y-24">
           {serviceDetails.map((service, index) => (
-            <div
+            <article
               key={service.id}
               id={service.id}
               className={`flex flex-col ${index % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"} gap-12 items-stretch scroll-mt-24`}
+              aria-labelledby={`${service.id}-title`}
             >
               {/* Colonne Gauche - Présentation */}
               <div className="flex-1 flex flex-col space-y-6">
@@ -182,13 +192,16 @@ export default function ServicesPage() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-flux-panel border-y border-flux-border">
+      <section
+        className="py-20 bg-flux-panel border-y border-flux-border"
+        aria-label="Appel à l'action - Demander un devis"
+      >
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="text-3xl font-tech font-bold mb-6">
             Prêt à démarrer votre projet ?
@@ -201,6 +214,7 @@ export default function ServicesPage() {
             <Link
               href="/contact"
               className="group px-8 py-4 bg-flux-cyan text-flux-dark font-bold rounded-lg hover:bg-flux-cyan/90 transition-all hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] inline-flex items-center justify-center gap-2"
+              aria-label="Demander un devis gratuit"
             >
               Demander un devis
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -208,6 +222,7 @@ export default function ServicesPage() {
             <Link
               href="/about"
               className="px-8 py-4 bg-flux-dark border border-flux-border text-flux-text font-medium rounded-lg hover:border-flux-cyan hover:text-white transition-colors inline-flex items-center justify-center gap-2"
+              aria-label="En savoir plus sur Flux Electrique"
             >
               <Laptop className="w-4 h-4" />
               En savoir plus
