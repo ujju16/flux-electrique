@@ -46,3 +46,52 @@ model ContactSubmission {
 
   @@index([createdAt])
 }
+
+/// Contact and quote requests
+model ContactRequest {
+  id          String        @id @default(cuid())
+  type        ServiceType   @default(OTHER) // Hardware, Software, ou Autre
+  designation String        // Ex: "MacBook Pro M1 - Écran noir" ou "Site E-commerce Next.js"
+  
+  // Infos Client
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  
+  // Détails
+  message     String        @db.Text
+  budget      BudgetRange   @default(UNKNOWN)
+  
+  // Meta
+  status      RequestStatus @default(NEW)
+  ipAddress   String?       // Pour la sécurité/rate limiting
+  createdAt   DateTime      @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([type])
+}
+
+enum ServiceType {
+  HARDWARE_REPAIR
+  SOFTWARE_DEV
+  DEVSECOPS_CONSULTING
+  OTHER
+}
+
+enum BudgetRange {
+  UNKNOWN
+  LESS_THAN_500
+  FROM_500_TO_2K
+  FROM_2K_TO_10K
+  MORE_THAN_10K
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  CONVERTED
+  ARCHIVED
+}
