@@ -2,25 +2,35 @@
 
 /* Flux Electrique - Dark Theme */
 :root {
-  /* Couleurs principales */
-  --flux-primary: #00e5ff; /* Cyan électrique */
-  --flux-secondary: #00c853; /* Vert Matrix/Circuit */
-  --flux-bg-deep: #0d1117; /* Noir profond */
-  --flux-bg-card: #161b22; /* Gris foncé pour cartes */
-  --flux-text: #e6edf3; /* Blanc cassé */
+  /* Palette Flux Electrique */
+  --flux-dark: #0d1117;
+  --flux-panel: #161b22;
+  --flux-cyan: #00e5ff;
+  --flux-green: #00c853;
+  --flux-text: #e6edf3;
+  --flux-border: #30363d;
 
-  /* Compatibilité */
-  --background: var(--flux-bg-deep);
+  /* Legacy compatibility */
+  --flux-primary: #00e5ff;
+  --flux-secondary: #00c853;
+  --flux-bg-deep: #0d1117;
+  --flux-bg-card: #161b22;
+  --background: var(--flux-dark);
   --foreground: var(--flux-text);
 }
 
 @theme inline {
   /* Couleurs personnalisées Flux Electrique */
+  --color-flux-dark: var(--flux-dark);
+  --color-flux-panel: var(--flux-panel);
+  --color-flux-cyan: var(--flux-cyan);
+  --color-flux-green: var(--flux-green);
+  --color-flux-text: var(--flux-text);
+  --color-flux-border: var(--flux-border);
   --color-flux-primary: var(--flux-primary);
   --color-flux-secondary: var(--flux-secondary);
   --color-flux-bg-deep: var(--flux-bg-deep);
   --color-flux-bg-card: var(--flux-bg-card);
-  --color-flux-text: var(--flux-text);
 
   /* Standard colors */
   --color-background: var(--background);
@@ -30,12 +40,49 @@
   --font-sans: var(--font-inter);
   --font-display: var(--font-orbitron);
   --font-mono: var(--font-fira-code);
+  --font-roboto: var(--font-inter);
+  --font-tech: var(--font-orbitron);
 }
 
 body {
-  background: var(--flux-bg-deep);
+  background-color: var(--flux-dark);
   color: var(--flux-text);
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Effet de Grille "Tech" (Background) */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(48, 54, 61, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(48, 54, 61, 0.3) 1px, transparent 1px);
+}
+
+/* Effet de lueur diffuse pour le Hero */
+.glow-effect {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 255, 0.15) 0%,
+    rgba(13, 17, 23, 0) 70%
+  );
+}
+
+/* Animation fade-in */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
 }
