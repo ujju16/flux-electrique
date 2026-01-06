@@ -16,11 +16,17 @@ export default function ContactPage() {
   );
 
   return (
-    <main className="min-h-screen bg-flux-dark pt-24 pb-12 px-4">
+    <main
+      className="min-h-screen bg-flux-dark pt-24 pb-12 px-4"
+      aria-labelledby="contact-heading"
+    >
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-tech font-bold text-white mb-4">
+          <h1
+            id="contact-heading"
+            className="text-4xl md:text-5xl font-tech font-bold text-white mb-4"
+          >
             Parlez-nous de votre <span className="text-flux-cyan">Projet</span>
           </h1>
           <p className="text-slate-400 text-lg">
@@ -36,7 +42,12 @@ export default function ContactPage() {
 
           {state.success ? (
             /* --- SUCCESS STATE --- */
-            <div className="text-center py-12 animate-fade-in-up">
+            <div
+              className="text-center py-12 animate-fade-in-up"
+              role="status"
+              aria-live="polite"
+              aria-label="Formulaire soumis avec succès"
+            >
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-flux-green/10 border border-flux-green mb-6">
                 <CheckCircle2 className="w-10 h-10 text-flux-green" />
               </div>
@@ -48,18 +59,23 @@ export default function ContactPage() {
                 type="button"
                 onClick={() => window.location.reload()}
                 className="text-flux-cyan hover:text-white underline underline-offset-4"
+                aria-label="Envoyer une nouvelle demande de contact"
               >
                 Envoyer une nouvelle demande
               </button>
             </div>
           ) : (
             /* --- FORM STATE --- */
-            <form action={formAction} className="space-y-8 relative z-10">
+            <form
+              action={formAction}
+              className="space-y-8 relative z-10"
+              aria-label="Formulaire de demande de devis"
+            >
               {/* Section 1: Le Besoin */}
-              <div className="space-y-4">
-                <h3 className="text-flux-cyan font-mono text-sm uppercase tracking-wider flex items-center gap-2">
+              <fieldset className="space-y-4">
+                <legend className="text-flux-cyan font-mono text-sm uppercase tracking-wider flex items-center gap-2">
                   <Zap className="w-4 h-4" /> 01. Définition du besoin
-                </h3>
+                </legend>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Service Type */}
@@ -96,7 +112,11 @@ export default function ContactPage() {
                       />
                     </label>
                     {state.errors?.designation && (
-                      <p className="text-red-400 text-xs">
+                      <p
+                        id="designation-error"
+                        className="text-red-400 text-xs"
+                        role="alert"
+                      >
                         {state.errors.designation}
                       </p>
                     )}
@@ -130,15 +150,15 @@ export default function ContactPage() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </fieldset>
 
               <hr className="border-flux-border/50" />
 
               {/* Section 2: Identité */}
-              <div className="space-y-4">
-                <h3 className="text-flux-cyan font-mono text-sm uppercase tracking-wider flex items-center gap-2">
+              <fieldset className="space-y-4">
+                <legend className="text-flux-cyan font-mono text-sm uppercase tracking-wider flex items-center gap-2">
                   <Zap className="w-4 h-4" /> 02. Vos Coordonnées
-                </h3>
+                </legend>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -198,7 +218,7 @@ export default function ContactPage() {
                     </label>
                   </div>
                 </div>
-              </div>
+              </fieldset>
 
               {/* Section 3: Message */}
               <div className="space-y-2">
@@ -228,6 +248,8 @@ export default function ContactPage() {
                 type="submit"
                 disabled={isPending}
                 className="w-full py-4 bg-gradient-to-r from-flux-cyan to-blue-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                aria-label={isPending ? "Envoi en cours" : "États"}
+                aria-busy={isPending}
               >
                 {isPending ? (
                   <>

@@ -3,7 +3,10 @@ import { ArrowRight, Cpu, Code2 } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <section
+      aria-label="Page d'accueil - Introduction Flux Electrique"
+      className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden"
+    >
       {/* --- BACKGROUND ELEMENTS --- */}
       {/* Grille technique */}
       <div className="absolute inset-0 bg-grid-pattern z-0 pointer-events-none" />
@@ -17,7 +20,11 @@ export default function Hero() {
       {/* --- CONTENT --- */}
       <div className="container mx-auto px-4 z-20 relative text-center max-w-5xl">
         {/* Badge "Dispo" */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-flux-panel border border-flux-border mb-8 animate-fade-in-up">
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-flux-panel border border-flux-border mb-8 animate-fade-in-up"
+          role="status"
+          aria-label="Statut : Systèmes opérationnels"
+        >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-flux-green opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-flux-green" />
@@ -53,6 +60,7 @@ export default function Hero() {
           <Link
             href="/contact"
             className="group relative px-8 py-4 bg-flux-cyan/10 border border-flux-cyan text-flux-cyan font-bold rounded-md overflow-hidden transition-all hover:bg-flux-cyan hover:text-black hover:shadow-[0_0_20px_rgba(0,229,255,0.6)]"
+            aria-label="Demander un devis gratuit - Accéder au formulaire de contact"
           >
             <span className="relative z-10 flex items-center gap-2">
               Demander un devis{" "}
@@ -64,13 +72,17 @@ export default function Hero() {
           <Link
             href="/services"
             className="px-8 py-4 bg-flux-panel border border-flux-border text-gray-300 rounded-md hover:border-gray-500 hover:text-white transition-colors flex items-center gap-2"
+            aria-label="Explorer nos services - Réparation hardware et développement logiciel"
           >
             <Cpu className="w-4 h-4" /> Nos Services
           </Link>
         </div>
 
         {/* Tech Stack Icons (Visuel rapide) */}
-        <div className="mt-16 pt-8 border-t border-flux-border/30 flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+        <nav
+          className="mt-16 pt-8 border-t border-flux-border/30 flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+          aria-label="Technologies utilisées"
+        >
           <div className="flex items-center gap-2">
             <Code2 className="w-5 h-5" /> Next.js 16
           </div>
@@ -78,7 +90,7 @@ export default function Hero() {
             <Cpu className="w-5 h-5" /> Micro-Elec
           </div>
           <div className="flex items-center gap-2">GKE Kubernetes</div>
-        </div>
+        </nav>
       </div>
     </section>
   );
