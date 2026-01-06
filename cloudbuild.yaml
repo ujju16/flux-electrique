@@ -1,0 +1,71 @@
+timeout: 1800s
+options:
+  logging: CLOUD_LOGGING_ONLY
+  requestedVerifyOption: VERIFIED
+  machineType: E2_HIGHCPU_8
+substitutions:
+  _IMAGE: europe-west1-docker.pkg.dev/$PROJECT_ID/flux/flux-electrique
+  _GKE_CLUSTER: flux-electrique-prod
+  _GKE_REGION: europe-west1
+  _GKE_NAMESPACE: flux-prod
+  _DEPLOYMENT: flux-electrique
+  _ENV: production
+steps:
+  - id: npm-ci-lint-build
+    name: gcr.io/cloud-builders/npm
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        echo "🔧 Installing dependencies..."
+        npm ci
+        echo "✅ Linting code..."
+        npm run lint
+        echo "🏗️  Building Next.js app..."
+        npm run build
+  - id: docker-build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - Dockerfile
+      - -t
+      - ${_IMAGE}:$SHORT_SHA
+      - -t
+      - ${_IMAGE}:latest
+      - .
+  - id: trivy-scan
+    name: aquasec/trivy:0.52.2
+    entrypoint: /bin/sh
+    args:
+      - -c
+      - |
+        echo "🔍 Scanning for vulnerabilities (PRODUCTION - zero tolerance)..."
+        trivy image --exit-code 1 --severity CRITICAL,HIGH --no-progress ${_IMAGE}:$SHORT_SHA
+        echo "✅ Production security scan passed"
+  - id: docker-push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_IMAGE}
+  - id: kubectl-apply
+    name: gcr.io/cloud-builders/kubectl
+    env:
+      - CLOUDSDK_COMPUTE_REGION=${_GKE_REGION}
+      - CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        echo "🚀 Deploying to ${_ENV} environment..."
+        kubectl apply -k k8s/overlays/production/
+        kubectl set image deployment/${_DEPLOYMENT} web=${_IMAGE}:$SHORT_SHA -n ${_GKE_NAMESPACE}
+        kubectl rollout status deployment/${_DEPLOYMENT} -n ${_GKE_NAMESPACE} --timeout=300s
+        echo "✅ PRODUCTION deployment complete!"
+        echo "📊 Monitoring rollout health..."
+images:
+  - ${_IMAGE}:$SHORT_SHA
+  - ${_IMAGE}:latest

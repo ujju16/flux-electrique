@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: flux-prod
+namePrefix: prod-
+commonLabels:
+  environment: production
+  managed-by: kustomize
+resources:
+  - ../../base
+patches:
+  - patch: |-
+      - op: replace
+        path: /metadata/name
+        value: flux-prod
+    target:
+      kind: Namespace
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+    target:
+      kind: Deployment
+      name: flux-electrique
+  - patch: |-
+      - op: replace
+        path: /spec/strategy/rollingUpdate/maxUnavailable
+        value: 0
+      - op: replace
+        path: /spec/strategy/rollingUpdate/maxSurge
+        value: 2
+    target:
+      kind: Deployment
+      name: flux-electrique
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: 250m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: 256Mi
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: 500m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 512Mi
+    target:
+      kind: Deployment
+      name: flux-electrique
